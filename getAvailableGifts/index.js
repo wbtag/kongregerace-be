@@ -2,7 +2,7 @@ const query = require('../query');
 
 module.exports = async function (context, req) {
 
-  const gifts = await query(`select * from [dbo].[Dar] order by name asc`)
+  const gifts = await query(`SELECT * FROM [dbo].[Dar] WHERE reserved = 0 ORDER BY name ASC`)
 
   context.res = {
     status: 200,
