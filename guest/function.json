@@ -6,8 +6,11 @@
       "direction": "in",
       "name": "req",
       "methods": [
-        "options",
-        "post"
+        "get",
+        "put",
+        "post",
+        "delete",
+        "options"
       ]
     },
     {
