@@ -1,14 +1,15 @@
-const query = require('../query');
+module.exports = async function (context, req, container) {
 
-module.exports = async function (context, req) {
+    const rsvpId = req.query.rsvpId;
 
-    const rsvpId = req.rsvpId;
+    const response = await container.item(rsvpId, rsvpId).delete();
 
-    await query(`DELETE FROM [dbo].[Host] WHERE rsvpId = '${rsvpId}'`)
+    if(!response.statusCode === 204) {
+        throw new Error(`Error deleting guest ${rsvpId}`);   
+    }
 
     context.res = {
         status: 200,
-        body: formattedData,
         headers: {
             'Access-Control-Allow-Origin': '*'
         }

@@ -1,20 +1,30 @@
-const query = require('../query');
+const cosmosInit = require("../cosmosInit");
 
-module.exports = async function (context, req) {
+module.exports = async function (context, req, container) {
 
     const rsvpId = req.query.rsvpId;
 
-    const data = await query(`select * from [dbo].[Host] where rsvpId = '${rsvpId}'`);
+    const { resource } = await container.item(rsvpId, rsvpId).read();
+
+    const { _rid, _self, _etag, _attachments, _ts, ownGift, giftId, ...rest } = resource;
+
+    let gift;
+    if (giftId) {
+        const giftContainer = await cosmosInit(process.env['CosmosGiftsContainerName']);
+        const { resource } = await giftContainer.item(giftId, giftId).read();
+        gift = resource;
+    }
+
 
     const formattedData = {
-        guestType: data[0].guestType,
-        name: data[0].name,
-        email: data[0].email,
-        hasCompany: data[0].accompanyingGuest,
-        accompanyingGuestName: data[0].accompanyingGuest ? data[0].accompanyingGuestName : "",
-        giftType: data[0].ownGift ? 'own' : 'fromList',
-        giftId: data[0].ownGift ? 0 : data[0].giftId,
-        eveningAttendance: data[0].attendEvening
+        guest: {
+            ...rest,
+            ownGift: ownGift ? true : false,
+            giftId: ownGift ? null : giftId
+        },
+        gift: {
+            name: ownGift ? null : gift.name
+        }
     }
 
     context.res = {
