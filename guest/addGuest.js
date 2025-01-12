@@ -19,9 +19,11 @@ module.exports = async function (context, req) {
         await container.item(body.giftId, body.giftId).patch({operations: [{op: 'replace', path: '/reserved', value: true}]});
     }
 
+    const {giftName, ...guestBody} = body;
+
     const newGuest = {
         id: rsvpId,
-        ...body
+        ...guestBody
     }
 
     const container = await cosmosInit('kgrtest_gst');
