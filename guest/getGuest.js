@@ -5,6 +5,10 @@ module.exports = async function (context, req, container) {
     const rsvpId = req.query.rsvpId;
 
     const { resource } = await container.item(rsvpId, rsvpId).read();
+    
+    if (!resource) {
+        throw new Error('RSVP not found');
+    }
 
     const { _rid, _self, _etag, _attachments, _ts, ownGift, giftId, ...rest } = resource;
 

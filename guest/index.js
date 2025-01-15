@@ -28,12 +28,14 @@ module.exports = async function (context, req) {
                 await removeGuest(context, req, container);
             }
         } catch (err) {
-            console.log(err);
             if (err.message === 'RSVP not found') {
                 context.res = {
                     status: 404,
                     body: {
                         message: 'RSVP not found'
+                    },
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
                     }
                 }
             } else if (err.message === 'Gift already reserved') {
@@ -41,6 +43,9 @@ module.exports = async function (context, req) {
                     status: 400,
                     body: {
                         message: 'Gift already reserved'
+                    },
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
                     }
                 }
             } else {
@@ -48,6 +53,9 @@ module.exports = async function (context, req) {
                     status: 500,
                     body: {
                         message: 'Internal server error'
+                    },
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
                     }
                 }
             }
