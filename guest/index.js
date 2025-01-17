@@ -2,7 +2,7 @@ const getGuest = require('./getGuest');
 const addGuest = require('./addGuest');
 const removeGuest = require('./removeGuest');
 const updateGuest = require('./updateGuest.js');
-const cosmosInit = require('../cosmosInit.js');
+const cosmosInit = require('../lib/cosmosInit.js');
 
 module.exports = async function (context, req) {
 
@@ -43,6 +43,16 @@ module.exports = async function (context, req) {
                     status: 400,
                     body: {
                         message: 'Gift already reserved'
+                    },
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                    }
+                }
+            } else if (err.code === 409) {
+                context.res = {
+                    status: 418,
+                    body: {
+                        message: 'You son of a bitch, you actually did it'
                     },
                     headers: {
                         'Access-Control-Allow-Origin': '*',

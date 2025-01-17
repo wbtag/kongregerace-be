@@ -1,4 +1,4 @@
-const cosmosInit = require('../cosmosInit');
+const cosmosInit = require('../lib/cosmosInit');
 const { BlobServiceClient } = require("@azure/storage-blob");
 const xlsx = require('node-xlsx').default;
 

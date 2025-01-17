@@ -1,4 +1,4 @@
-const cosmosInit = require("../cosmosInit");
+const cosmosInit = require("../lib/cosmosInit");
 
 module.exports = async function (context, req, container) {
 
@@ -27,7 +27,7 @@ module.exports = async function (context, req, container) {
             giftId: ownGift ? null : giftId
         },
         gift: {
-            name: ownGift ? null : gift.name
+            name: giftId ? gift.name : null
         }
     }
 

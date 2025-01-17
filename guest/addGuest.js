@@ -1,10 +1,10 @@
-const sendEmail = require('../sendEmail');
+const sendEmail = require('../lib/sendEmail');
+const cosmosInit = require('../lib/cosmosInit');
 const crypto = require('crypto');
-const cosmosInit = require('../cosmosInit');
 
 module.exports = async function (context, req) {
     const body = req.body;
-    const rsvpId = crypto.randomUUID();
+    const rsvpId = crypto.randomUUID().split('-')[0].toUpperCase();
     let gift;
 
     if (!body.ownGift) {

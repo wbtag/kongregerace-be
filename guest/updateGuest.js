@@ -1,4 +1,4 @@
-const cosmosInit = require('../cosmosInit');
+const cosmosInit = require('../lib/cosmosInit');
 
 module.exports = async function (context, req, container) {
     const body = req.body;
@@ -11,12 +11,14 @@ module.exports = async function (context, req, container) {
 
     if (req.query.giftChange) {
         const giftContainer = await cosmosInit(process.env['CosmosGiftsContainerName']);
-        if (!body.ownGift) {
+        if (!body.ownGift) { // Guest has chosen a gift from the list => check its availability and reserve it
             await checkGiftAvailability(giftContainer, body.giftId);
             await giftContainer.item(body.giftId, body.giftId).patch({ operations: [{ op: 'replace', path: '/reserved', value: true }] });
             await container.item(body.id, body.id).patch({ operations: [{ op: 'replace', path: '/giftId', value: body.giftId }] });
+        } else { // Guest has chosen to bring their own gift => set giftId to null
+            await container.item(body.id, body.id).patch({ operations: [{ op: 'replace', path: '/giftId', value: null }] });
         }
-        if (!resource.giftId) {
+        if (resource.giftId) { // Guest previously reserved a different gift => set its reserved param to false
             await giftContainer.item(resource.giftId, resource.giftId).patch({ operations: [{ op: 'replace', path: '/reserved', value: false }] });
         }
         await container.item(body.id, body.id).patch({ operations: [{ op: 'replace', path: '/ownGift', value: body.ownGift }] });

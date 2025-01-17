@@ -1,4 +1,4 @@
-const cosmosInit = require('../cosmosInit');
+const cosmosInit = require('../lib/cosmosInit');
 
 module.exports = async function (context, req) {
 
