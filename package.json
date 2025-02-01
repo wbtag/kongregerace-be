@@ -4,11 +4,14 @@
   "description": "",
   "scripts": {
     "start": "func start",
-    "test": "echo \"No tests yet...\""
+    "test": "mocha tests/*.js"
   },
   "dependencies": {
     "@azure/cosmos": "^4.1.1",
     "@azure/storage-blob": "^12.26.0",
     "node-xlsx": "^0.24.0"
+  },
+  "devDependencies": {
+    "mocha": "^11.1.0"
   }
 }
