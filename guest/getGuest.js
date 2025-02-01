@@ -27,7 +27,8 @@ module.exports = async function (context, req, container) {
             giftId: ownGift ? null : giftId
         },
         gift: {
-            name: giftId ? gift.name : null
+            name: giftId ? gift.name : null,
+            link: giftId ? gift.link : null
         }
     }
 

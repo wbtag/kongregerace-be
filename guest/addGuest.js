@@ -34,6 +34,7 @@ module.exports = async function (context, req) {
     const params = {
         id: id,
         gift: giftId ? gift.name : 'vlastní',
+        giftLink: giftId ? gift.link : null,
         ...guest
     };
 
