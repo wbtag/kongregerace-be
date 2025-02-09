@@ -8,7 +8,7 @@ module.exports = async function (context, req) {
     let gift;
 
     if (!body.ownGift) {
-        const container = await cosmosInit('kgrtest_g');
+        const container = await cosmosInit('gifts');
         const rawResponse = await container.item(body.giftId, body.giftId).read();
         gift = rawResponse.resource;
 
@@ -26,7 +26,7 @@ module.exports = async function (context, req) {
         ...guestBody
     }
 
-    const container = await cosmosInit('kgrtest_gst');
+    const container = await cosmosInit('guests');
     const { resource } = await container.items.create(newGuest);
 
     const { _rid, _self, _etag, _attachments, _ts, id, giftId, ...guest } = resource;

@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "func start",
-    "test": "mocha tests/*.js"
+    "test": "mocha ./tests/*.js --local-settings=./local.settings.json --timeout 100000"
   },
   "dependencies": {
     "@azure/cosmos": "^4.1.1",

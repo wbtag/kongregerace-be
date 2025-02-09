@@ -5,7 +5,7 @@ module.exports = async function (context, req, container) {
     const rsvpId = req.query.rsvpId;
 
     const { resource } = await container.item(rsvpId, rsvpId).read();
-    
+
     if (!resource) {
         throw new Error('RSVP not found');
     }
@@ -32,11 +32,17 @@ module.exports = async function (context, req, container) {
         }
     }
 
+    const headers = {
+        'Access-Control-Allow-Origin': '*'
+    }
+
+    if (req.query.setCookie) {
+        headers['Set-Cookie'] = `gt=${resource.guestType}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=15552000`
+    }
+
     context.res = {
         status: 200,
         body: formattedData,
-        headers: {
-            'Access-Control-Allow-Origin': '*'
-        }
+        headers: headers
     }
 }

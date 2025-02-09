@@ -23,28 +23,28 @@ module.exports = async function (context, req, container) {
         }
         await container.item(body.id, body.id).patch({ operations: [{ op: 'replace', path: '/ownGift', value: body.ownGift }] });
     } else {
-        if (!body.ownGift) { // Guest has chosen a gift from the list in the updated RSVP
-            const oldGiftExists = !!resource.giftId;
-            if (resource.giftId != body.giftId) { // Chosen gift differs from a previously chosen gift
-                const giftContainer = await cosmosInit(process.env['CosmosGiftsContainerName']);
-                await checkGiftAvailability(giftContainer, body.giftId);
+        // if (!body.ownGift) { // Guest has chosen a gift from the list in the updated RSVP
+        //     const oldGiftExists = !!resource.giftId;
+        //     if (resource.giftId != body.giftId) { // Chosen gift differs from a previously chosen gift
+        //         const giftContainer = await cosmosInit(process.env['CosmosGiftsContainerName']);
+        //         await checkGiftAvailability(giftContainer, body.giftId);
 
-                if (oldGiftExists) { // If needed, free up old gift 
-                    await giftContainer.item(resource.giftId, resource.giftId).patch({ operations: [{ op: 'replace', path: '/reserved', value: false }] });
-                }
+        //         if (oldGiftExists) { // If needed, free up old gift 
+        //             await giftContainer.item(resource.giftId, resource.giftId).patch({ operations: [{ op: 'replace', path: '/reserved', value: false }] });
+        //         }
 
-                // Reserve new gift
-                await newGift.patch({ operations: [{ op: 'replace', path: '/reserved', value: true }] });
-            }
-        } else { // Guest has chosen to bring their own gift in the updated RSVP
-            if (resource.giftId) { // Guest previously chose a gift from the list
-                const giftContainer = await cosmosInit(process.env['CosmosGiftsContainerName']);
+        //         // Reserve new gift
+        //         await newGift.patch({ operations: [{ op: 'replace', path: '/reserved', value: true }] });
+        //     }
+        // } else { // Guest has chosen to bring their own gift in the updated RSVP
+        //     if (resource.giftId) { // Guest previously chose a gift from the list
+        //         const giftContainer = await cosmosInit(process.env['CosmosGiftsContainerName']);
 
-                // Free up old gift
-                const oldGift = giftContainer.item(resource.giftId, resource.giftId);
-                await oldGift.patch({ operations: [{ op: 'replace', path: '/reserved', value: false }] });
-            }
-        }
+        //         // Free up old gift
+        //         const oldGift = giftContainer.item(resource.giftId, resource.giftId);
+        //         await oldGift.patch({ operations: [{ op: 'replace', path: '/reserved', value: false }] });
+        //     }
+        // }
         await oldRsvp.replace(body);
     }
 

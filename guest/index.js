@@ -59,6 +59,7 @@ module.exports = async function (context, req) {
                     }
                 }
             } else {
+                context.log.error(err);
                 context.res = {
                     status: 500,
                     body: {
