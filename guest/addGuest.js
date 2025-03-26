@@ -16,10 +16,10 @@ module.exports = async function (context, req) {
             throw new Error('Gift already reserved');
         }
 
-        await container.item(body.giftId, body.giftId).patch({operations: [{op: 'replace', path: '/reserved', value: true}]});
+        await container.item(body.giftId, body.giftId).patch({ operations: [{ op: 'replace', path: '/reserved', value: true }] });
     }
 
-    const {giftName, ...guestBody} = body;
+    const { giftName, ...guestBody } = body;
 
     const newGuest = {
         id: rsvpId,
@@ -39,6 +39,11 @@ module.exports = async function (context, req) {
     };
 
     await sendEmail(body.email, 1, params, context);
+    try {
+        await sendEmail('svatba@kongregerace.cz', 3, params, context);
+    } catch (err) {
+        context.log('Failed to send new guest email');
+    }
 
     context.res = {
         status: 200,
